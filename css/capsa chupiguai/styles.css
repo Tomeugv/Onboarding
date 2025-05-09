@@ -1,0 +1,20 @@
+html {
+    font-family: sans-serif;
+    
+  }
+  
+  /* Your CSS below here */
+
+  div {
+    width: 200px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #e70909; /* Added a light background to make the box visible */
+    border-radius: 8px; /* Optional: adds rounded corners */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* Optional: adds subtle shadow */
+  }
+  
