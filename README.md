@@ -1,5 +1,5 @@
 # Onboarding
-
+    De python apenas hay ejemplos porque en su momento iba haciendo las pruebas en un mismo archivo .py, no se me ocurrió ir guradando cada uno de ellos
 
 
 ## Getting started
