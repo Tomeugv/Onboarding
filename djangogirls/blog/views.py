@@ -3,10 +3,19 @@ from django.utils import timezone
 from .models import Post
 from .forms import PostForm
 from django.shortcuts import redirect
+from django.views import generic
 
-def post_list(request):
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    return render(request, 'blog/post_list.html', {'posts': posts})
+
+class PostListView(generic.ListView):
+    model = Post  # Specify the model
+    template_name = "blog/post_list.html"
+    context_object_name = "posts"
+    
+    def get_queryset(self):
+        """Return published posts, ordered by date."""
+        return Post.objects.filter(
+            published_date__lte=timezone.now()
+        ).order_by('published_date')
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
