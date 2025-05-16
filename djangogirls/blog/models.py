@@ -10,7 +10,7 @@ class Post(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     modified_date = models.DateTimeField(blank=True, null=True)
-#    modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    modified_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='modified_by')
 
     def publish(self):
         self.published_date = timezone.now()

@@ -36,7 +36,9 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         form.instance.published_date = timezone.now()
-        return super().form_valid(form)
+        response = super().form_valid(form)  # Saves the form first
+        form.instance.modified_by.add(self.request.user)  # Adds current user to M2M
+        return response
 
 
 class PostUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -45,7 +47,7 @@ class PostUpdateView(LoginRequiredMixin, generic.UpdateView):
     success_url = reverse_lazy('post_list')
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        form.instance.modified_by.add(self.request.user) 
         form.instance.modified_date = timezone.now()
         return super().form_valid(form)
 
