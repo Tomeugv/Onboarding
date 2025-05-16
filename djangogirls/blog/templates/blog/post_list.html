@@ -5,7 +5,12 @@
         <article class="post">
             <time class="date">
                 {{ post.published_date }}
+            </time><br>
+            {% if post.modified_date %}
+            <time class="date">
+                {{ post.modified_date }}
             </time>
+            {% endif %}
             <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
             <p>{{ post.text|linebreaksbr }}</p>
         </article>
