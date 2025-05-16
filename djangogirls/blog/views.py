@@ -1,9 +1,11 @@
+from dataclasses import fields
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from .models import Post
 from .forms import PostForm
 from django.shortcuts import redirect
 from django.views import generic
+
 
 
 class PostListView(generic.ListView):
@@ -26,7 +28,12 @@ class DetailView(generic.DetailView):
     context_object_name = "post"
 
 
+class CreateView(generic.CreateView):
+    model = Post
+    template_name = "blog/post_edit.html"
+    fields = ['title', 'text']
 
+'''
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -39,7 +46,7 @@ def post_new(request):
     else:
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
-
+'''
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
