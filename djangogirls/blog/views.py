@@ -1,10 +1,11 @@
-from dataclasses import fields
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
 from django.utils import timezone
 from .models import Post
 from .forms import PostForm
 from django.shortcuts import redirect
 from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 
@@ -28,12 +29,22 @@ class DetailView(generic.DetailView):
     context_object_name = "post"
 
 
+class PostCreateView(LoginRequiredMixin, generic.CreateView):
+    form_class = PostForm 
+    template_name = 'blog/post_edit.html'
+    success_url = reverse_lazy('post_list')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.published_date = timezone.now()
+        return super().form_valid(form)
+
+'''
 class CreateView(generic.CreateView):
     model = Post
     template_name = "blog/post_edit.html"
     fields = ['title', 'text']
-
-'''
+    
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
