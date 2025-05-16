@@ -7,7 +7,7 @@ from django.views import generic
 
 
 class PostListView(generic.ListView):
-    model = Post  # Specify the model
+    model = Post
     template_name = "blog/post_list.html"
     context_object_name = "posts"
     
@@ -17,9 +17,13 @@ class PostListView(generic.ListView):
             published_date__lte=timezone.now()
         ).order_by('published_date')
 
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_detail.html', {'post': post})
+
+
+class DetailView(generic.DetailView):
+    model = Post
+    template_name = "blog/post_detail.html"
+    context_object_name = "post"
+
 
 
 def post_new(request):
