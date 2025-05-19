@@ -1,7 +1,7 @@
 
 from django.urls import reverse_lazy
 from django.utils import timezone
-from .models import Post
+from .models import Post, PostEditHistory
 from .forms import PostForm
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -42,15 +42,35 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
 
 
 class PostUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Post
     form_class = PostForm 
     template_name = 'blog/post_edit.html'
     success_url = reverse_lazy('post_list')
 
     def form_valid(self, form):
-        form.instance.modified_by.add(self.request.user) 
+        # Get the original post before changes
+        original_post = self.get_object()
+        
+        # Detect changed fields
+        changed_fields = []
+        if form.instance.title != original_post.title:
+            changed_fields.append('title')
+        if form.instance.text != original_post.text:
+            changed_fields.append('text')
+        
+        # Save modifications
         form.instance.modified_date = timezone.now()
-        return super().form_valid(form)
-
-    def get_queryset(self, **kwargs):
-        return Post.objects.filter(**kwargs)
-
+        response = super().form_valid(form)
+        
+        # Record edit history if any changes were made
+        if changed_fields:
+            post_edit = PostEditHistory.objects.create(
+                post=form.instance,
+                user=self.request.user,
+                changed_fields=", ".join(changed_fields)
+            )
+            post_edit.save()
+            form.instance.modified_by.add(self.request.user)
+        
+        return response
+    
