@@ -9,4 +9,5 @@ urlpatterns = [
     path('post/new/', views.PostCreateView.as_view(), name='post_new'),
     path('post/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post_edit'),
     path('author/<str:username>/', views.AuthorPostsView.as_view(), name='author_posts'),
+    path('category/<slug:slug>/', views.CategoryPostsView.as_view(), name='category_posts'),
 ] + debug_toolbar_urls()
