@@ -12,7 +12,9 @@
             </time>
             {% endif %}
             <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+            <h6>Author: {{ post.author }}</h6>
             <p>{{ post.text|linebreaksbr }}</p>
+   
         </article>
     {% endfor %}
 
