@@ -11,11 +11,16 @@
         </aside>
         {% if post.published_date %}
             <time class="date">
-                {{ post.published_date }}
+                Published: {{ post.published_date }}
+            </time>
+        {% endif %}
+        {% if post.modified_date %}
+            <time class="date">
+                | Last modified: {{ post.modified_date }}
             </time>
         {% endif %}
         <h2>{{ post.title }}</h2>
-        <h6>Author: {{ post.author }}</h6>
+        <h6>Author: <a href="{% url 'author_posts' username=post.author.username %}">{{ post.author.username }}</a></h6>
         <p>{{ post.text|linebreaksbr }}</p>
     </article>
 {% endblock %}
