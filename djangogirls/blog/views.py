@@ -7,21 +7,25 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from .filters import PostFilter
 
 User = get_user_model()
 
 
 class PostListView(generic.ListView):
-    paginate_by = 5
     model = Post
-    template_name = "blog/post_list.html"
-    context_object_name = "posts"
-    
+    template_name = 'blog/post_list.html'
+    context_object_name = 'posts'
+
     def get_queryset(self):
-        """Return published posts, ordered by date."""
-        return Post.objects.filter(
-            published_date__lte=timezone.now()
-        ).order_by('published_date')
+        queryset = super().get_queryset()
+        self.filterset = PostFilter(self.request.GET, queryset=queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter'] = self.filterset
+        return context
 
 
 
