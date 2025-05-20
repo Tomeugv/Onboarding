@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'django.contrib.sites',
+    'users',
     'django_filters',
     'crispy_forms',
     "crispy_bootstrap5",
@@ -139,3 +141,10 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.pythonanywhere.com']
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+
+SITE_ID = 1
+
+# Authentication settings
+LOGIN_REDIRECT_URL = 'post_list'
+LOGOUT_REDIRECT_URL = 'post_list'
